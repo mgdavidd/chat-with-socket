@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat</title>
+  <link rel="stylesheet" href="/public/css/chat.css">
+
+  <script type="module">
+    const closeSession = document.getElementById('close-session')
+
+    closeSession.addEventListener('click', e => {
+    e.preventDefault()
+    fetch('/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(res => {
+          console.log(res)
+          window.location.href = '/login'
+        })
+    })
+    import { io } from 'https://cdn.socket.io/4.3.2/socket.io.esm.min.js';
+  
+    const username = "<%= username %>";
+
+    console.log('Usuario en cliente:', username);
+    const socket = io('http://localhost:3000', {
+      auth: { username }
+    });
+  
+    const form = document.getElementById('form');
+    const input = document.getElementById('input');
+    const messages = document.getElementById('messages');
+  
+    // Emitir el evento para recuperar mensajes antiguos
+    socket.on('connect', () => {
+      socket.emit('recover messages');
+    });
+  
+    socket.on('chat message', (msg, messageUsername, date) => {
+      console.log(date)
+      const messageContent = typeof msg === 'string' ? msg : JSON.stringify(msg);
+      const isMyMessage = messageUsername === username;
+      const messageClass = isMyMessage ? 'my-message' : 'other-message';
+      // Construcción del mensaje
+      setTimeout(() => {
+        const item = `
+        <li class="${messageClass}">
+          <small>${messageUsername}</small>
+          <p>${messageContent}</p>
+          <p class="date">${date}</p>
+        </li>`;
+        messages.insertAdjacentHTML('beforeend', item);
+        messages.scrollTop = messages.scrollHeight;
+      }, 300);
+
+    });
+  
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (input.value) {
+        socket.emit('chat message', input.value);
+        input.value = '';
+      }
+    });
+  
+    socket.on('disconnect', () => {
+      console.log('Desconectado del servidor');
+    });
+  
+    socket.on('connect_error', (err) => {
+      console.error('Error de conexión:', err.message);
+    });
+  </script>
+  
+  
+
+</head>
+
+<body>
+  
+  <section id="chat">
+    <ul id="messages"></ul>  
+    <form id="form">  
+      <input type="text" name="message" id="input" placeholder="Escribe tu mensaje" autocomplete="off" required />
+      <button type="submit">Enviar</button>
+    </form>
+  </section>
+  <button id="close-session">Cerrar session</button>
+</body>
+
+</html>

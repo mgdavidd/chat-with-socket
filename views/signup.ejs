@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscribirse</title>
+  <link rel="stylesheet" href="/public/css/login-sigin.css">
+
+</head>
+<body>
+
+  <form action="/login" method="GET">
+    <button type="submit" class="return">
+      <img src="/public/img/arrow.png" alt="error" style="width: 140%; height: 100%; border-radius: 500px; margin-left: -4px;">
+    </button>
+  </form>
+      <!-- Mostrar mensajes de error si existen -->
+      <!-- Mostrar mensajes de error si existen -->
+<% if (errors) { %>
+  <div class="error-messages">
+    <ul>
+      <% if (Array.isArray(errors)) { %>
+        <% errors.forEach(function(error) { %>
+          <li><%= error.message ? error.message : error %></li>
+        <% }); %>
+      <% } else { %>
+        <li><%= errors %></li> <!-- Si errors es una cadena, mostrarla directamente -->
+      <% } %>
+    </ul>
+  </div>
+<% } %>
+
+
+  <div class="signup-container">
+    <h2>Crear Cuenta</h2>
+
+    <form action="/signup" method="POST">
+      <label for="name">Nombre Completo:</label>
+      <input type="text" id="name" name="name" value="<%= name %>" required>
+
+      <label for="username">Usuario:</label>
+      <input type="text" id="username" name="username" value="<%= username %>" required>
+
+      <label for="password">Contraseña:</label>
+      <input type="password" id="password" name="password" required>
+
+      <button type="submit">Inscribirse</button>
+    </form>
+  </div>
+
+</body>
+</html>
