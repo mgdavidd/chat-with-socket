@@ -28,7 +28,7 @@
     const username = "<%= username %>";
 
     console.log('Usuario en cliente:', username);
-    const socket = io('http://localhost:3000', {
+    const socket = io('https://chat-with-socket-3.onrender.com', {
       auth: { username }
     });
   
