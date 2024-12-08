@@ -7,8 +7,7 @@ import dotenv from 'dotenv';
 // Importamos los esquemas de validación
 import { validateSignup } from './schemas/validate.js';
 import bcrypt from 'bcryptjs'; // Para hashear la contraseña
-// Importamos las rutas
-import { ChatRouter } from './routes/chat-routes.js';
+//DB
 import { query } from './config/db.js';
 //importamos dependencias de sesion
 import jwt from 'jsonwebtoken'
@@ -47,8 +46,28 @@ app.use((req, res, next) => {
   next();
 });
 
-// Usamos el router del chat
-app.use('/', ChatRouter);
+app.get('/login', (req, res) => {
+  if (!req.user) {
+    res.render('login');
+  }else{
+    res.redirect('chat')
+  }
+});
+
+app.get('/signup', (req, res) => {
+    // Ponemos estos campos vacíos por defecto
+  if (!req.user) {
+    res.render('signup', {
+      errors: 0,
+      username: '',
+      name: ''
+    });
+  }else{
+    res.redirect('chat')
+
+  }
+});
+
 
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
