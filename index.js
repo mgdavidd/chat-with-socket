@@ -12,6 +12,9 @@ import { query } from './config/db.js';
 //importamos dependencias de sesion
 import jwt from 'jsonwebtoken'
 import cookieParser from 'cookie-parser';
+// CORS
+import cors from 'cors';
+
 
 dotenv.config();
 
@@ -23,6 +26,14 @@ const io = new Server(server);
 
 const port = process.env.PORT ?? 3000;
 const SECRET_JWT_KEY = process.env.SECRET_JWT_KEY
+
+const corsOptions = {
+  origin: 'https://chat-with-socket-3.onrender.com', // URL permitida
+  methods: ['GET', 'POST'], // Métodos permitidos
+  allowedHeaders: ['Content-Type', 'Authorization'], // Encabezados permitidos
+  credentials: true, // Permitir cookies en las solicitudes CORS
+};
+app.use(cors(corsOptions));
 
 // Middleware y configuración de estáticos
 app.use('/public/img/', express.static('public/img/'));
