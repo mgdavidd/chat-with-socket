@@ -46,7 +46,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/login', (req, res) => {
+app.get('/', (req, res) => {
   if (!req.user) {
     res.render('login');
   }else{
