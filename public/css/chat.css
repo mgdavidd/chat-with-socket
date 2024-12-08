@@ -12,119 +12,130 @@
 body {
   margin: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  display: grid;
-  place-content: center;
-  height: 100vh;
-  padding: 36px 36px 100px 36px;
-  grid-template-rows: 1fr;
-  background-color: #f3f4f6; /* Fondo claro para mejor contraste */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Ocupa todo el viewport */
+  background-color: #f3f4f6;
+  overflow: hidden; /* Evita scroll adicional */
 }
 
 #chat {
   border: 1px solid #ccc;
   border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
-  overflow: hidden;
-  width: 600px;
-  max-width: 100%; /* Asegura que no sobrepase el ancho del contenedor */
-  height: 100%;
-  position: relative;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 90%; /* Adaptable */
+  max-width: 600px;
+  height: 100%; /* Ocupa el 100% de la altura */
   background-color: #ffffff;
-}
-
-/* Estilos para el formulario de chat */
-#form {
-  bottom: 0;
   display: flex;
-  height: 48px;
-  left: 0;
-  padding: 8px;
-  position: absolute;
-  right: 0;
-  background-color: #f3f4f6;
-  border-top: 1px solid #e5e7eb;
+  flex-direction: column;
 }
 
-#input {
-  border-radius: 20px;
-  border: 1px solid #ddd;
-  flex: 1;
-  padding: 0 16px;
-  font-size: 16px;
-}
-
-#input:focus {
-  outline: 0;
-  border-color: #0cf; /* Color de borde cuando está enfocado */
-}
-
-#form > button {
-  background: #0cf;
-  color: #fff;
-  border: 0;
-  padding: 8px 12px;
-  margin-left: 8px;
-  border-radius: 20px;
-  font-weight: bold;
-  transition: background 0.3s;
-}
-
-#form > button:hover {
-  background: #09f;
-  cursor: pointer;
-}
-
-/* Estilos para los mensajes */
+/* Lista de mensajes */
 #messages {
   list-style-type: none;
   margin: 0;
-  padding: 10px;
-  overflow-y: auto;
-  height: calc(100% - 60px); /* Ajusta el alto para compensar la barra inferior */
-  scroll-behavior: smooth;
-  padding-bottom: 10px;
+  padding: 8px; /* Menor padding */
+  overflow-y: auto; /* Scroll si hay demasiados mensajes */
+  flex: 1; /* Ocupa el espacio disponible */
   display: flex;
   flex-direction: column;
-  gap: 10px; /* Espacio entre mensajes */
+  gap: 8px; /* Espacio entre mensajes */
+  background-color: #f9f9f9;
 }
 
-/* Mensajes generales */
 #messages > li {
-  padding: 0.5rem 1rem;
-  margin: 5px 0;
+  padding: 0.4rem 0.8rem;
+  margin: 0;
   border-radius: 10px;
   word-wrap: break-word;
   box-sizing: border-box;
-  max-width: 75%; /* Limitar el ancho de cada mensaje */
+  max-width: 90%; /* Máximo uso del espacio */
+  font-size: 1rem;
 }
 
-/* Mensaje propio alineado a la derecha */
 .my-message {
   background-color: #497491;
   color: #fff;
   align-self: flex-end;
   text-align: right;
-  border-radius: 10px 10px 0 10px; /* Bordes redondeados */
+  border-radius: 10px 10px 0 10px;
 }
 
-/* Mensaje de otros usuarios alineado a la izquierda */
 .other-message {
   background-color: #2c2a2a;
   color: #e5e5e5;
   align-self: flex-start;
   text-align: left;
-  border-radius: 10px 10px 10px 0; /* Bordes redondeados */
+  border-radius: 10px 10px 10px 0;
 }
 
-
-/* Estilos para el nombre de usuario */
 small {
   color: #fff;
-  font-size: 12px;
-  margin-bottom: 4px;
+  font-size: 0.8rem;
+  margin-top: 4px;
   display: block;
+  text-align: right;
 }
 
+/* Formulario de chat */
+#form {
+  display: flex;
+  padding: 6px;
+  background-color: #f3f4f6;
+  border-top: 1px solid #e5e7eb;
+}
+
+#input {
+  flex: 1;
+  padding: 0.4rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+}
+
+#form > button {
+  margin-left: 8px;
+  padding: 0.4rem 1rem;
+  border: none;
+  background-color: #0cf;
+  color: white;
+  font-weight: bold;
+  border-radius: 20px;
+  transition: background 0.3s ease;
+}
+
+#form > button:hover {
+  background-color: #09f;
+  cursor: pointer;
+}
+
+/* Media query para dispositivos pequeños */
+@media (max-width: 768px) {
+  #chat {
+    width: 100%; /* Ocupar todo el ancho */
+    height: 100%; /* Ocupa toda la pantalla */
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  #messages > li {
+    font-size: 0.9rem;
+    padding: 0.3rem 0.6rem;
+    max-width: 95%; /* Mejor uso del espacio */
+  }
+
+  #input {
+    font-size: 0.9rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  #form > button {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+  }
+}
 
 /* Estilo para la fecha y hora */
 .date {
