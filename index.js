@@ -22,17 +22,21 @@ dotenv.config();
 const app = express();
 const server = createServer(app);
 // Conectamos al socket.io
-const io = new Server(server);
+const io = new Server(server, {
+  pingTimeout: 60000, // Tiempo de espera más largo
+  pingInterval: 25000 // Intervalo para enviar pings
+});
 
 const port = process.env.PORT ?? 3000;
 const SECRET_JWT_KEY = process.env.SECRET_JWT_KEY
 
 const corsOptions = {
-  origin: 'https://chat-with-socket-1-s0rl.onrender.com', // URL permitida
-  methods: ['GET', 'POST'], // Métodos permitidos
-  allowedHeaders: ['Content-Type', 'Authorization'], // Encabezados permitidos
-  credentials: true, // Permitir cookies en las solicitudes CORS
+  origin: 'https://chat-with-socket-1-s0rl.onrender.com', // Quita el espacio y usa solo el dominio
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
 };
+
 app.use(cors(corsOptions));
 
 // Middleware y configuración de estáticos
@@ -469,5 +473,5 @@ io.on('connection', async (socket) => {
 
 // Iniciar el servidor HTTP y WebSocket
 server.listen(port, () => {
-  console.log(`Servidor ejecutándose en http://localhost:${port}`);
+  console.log(`Servidor ejecutándose en https://chat-with-socket-1-s0rl.onrender.com`);
 });

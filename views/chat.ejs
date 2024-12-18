@@ -17,7 +17,8 @@
 
     // Conexión al servidor de Socket.IO
     const socket = io('https://chat-with-socket-1-s0rl.onrender.com', {
-      auth: { token, chatId }
+      auth: { token, chatId },
+      transports: ['websocket', 'polling'] // Forzar solo WebSockets
     });
   
     const form = document.getElementById('form');

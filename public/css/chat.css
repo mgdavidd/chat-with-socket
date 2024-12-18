@@ -1,4 +1,4 @@
-/* Reset básico */
+/* Reset y configuración básica */
 * {
   margin: 0;
   padding: 0;
@@ -26,7 +26,6 @@ body {
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
-  margin-bottom: 10%;
 }
 
 #chat .header {
@@ -38,21 +37,17 @@ body {
   height: 15%;
   width: 100%;
   border-radius: 10px 10px 0 0;
-  position: relative;
-  overflow: hidden;
   padding-left: 2%;
 }
+
 #chat .header .info {
   margin-left: 5%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: #0056b3;
   color: #f0f0f0;
-  height: 30%;
+  height: 100%;
   width: 80%;
-  position: relative;
-  overflow: hidden;
   padding-left: 2%;
   box-sizing: border-box;
 }
@@ -61,8 +56,8 @@ body {
   margin: 0;
   font-size: 1.8rem;
   white-space: nowrap;
-  position: absolute;  /* Cambiado para evitar que se desborde */
-  width: 100%;  /* Asegura que el texto ocupe todo el contenedor */
+  position: relative;
+  width: 100%;
   animation: scroll-text 7s linear infinite;
 }
 
@@ -74,13 +69,12 @@ body {
 
 @keyframes scroll-text {
   from {
-    transform: translateX(100%);  /* Inicia desde fuera de la pantalla */
+    transform: translateX(100%);
   }
   to {
-    transform: translateX(-100%);  /* Termina fuera de la pantalla también */
+    transform: translateX(-100%);
   }
 }
-
 
 /* Lista de mensajes */
 #messages {
@@ -119,28 +113,33 @@ body {
 /* Formulario */
 #form {
   display: flex;
-  padding: 6px;
+  padding: 8px;
   background-color: #f3f4f6;
   border-top: 1px solid #e5e7eb;
+  width: 100%;
+  box-sizing: border-box;
+  gap: 6px;
 }
 
 #input {
   flex: 1;
-  padding: 0.4rem 1rem;
+  padding: 0.6rem 1rem;
   font-size: 1rem;
   border: 1px solid #ddd;
   border-radius: 20px;
+  box-sizing: border-box;
 }
 
 #form > button {
   margin-left: 8px;
-  padding: 0.4rem 1rem;
+  padding: 0.6rem 1rem;
   border: none;
   background-color: #0cf;
   color: white;
   font-weight: bold;
   border-radius: 20px;
   transition: background 0.3s ease;
+  white-space: nowrap;
 }
 
 #form > button:hover {
@@ -152,7 +151,7 @@ body {
 .return-button {
   position: fixed;
   top: 20px;
-  right: 30px; 
+  right: 30px;
   z-index: 1000;
   background-color: #4285f4;
   color: #fff;
@@ -187,3 +186,35 @@ body {
   }
 }
 
+@media (max-width: 480px) {
+  #form {
+    flex-direction: row;
+    padding: 6px;
+    gap: 6px;
+  }
+
+  #input {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+  }
+
+  #form > button {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.8rem;
+  }
+
+  .return-button {
+    top: 10px;
+    right: 10px;
+    padding: 0.7rem;
+    font-size: 0.8rem;
+  }
+
+  #chat .header .info h1 {
+    font-size: 1.2rem;
+  }
+
+  #chat small {
+    font-size: 0.8rem;
+  }
+}
