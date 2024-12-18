@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create chat</title>
+    <link rel="stylesheet" href="/public/css/login-sigin.css">
+    <style>
+        /* Estilos adicionales para el mensaje de error */
+        .error {
+            color: red;
+            font-size: 0.9rem;
+            margin-top: -2%;
+            margin-bottom: 0;
+            margin-left: 5%;
+        }
+    </style>
+</head>
+<body>
+    <div class="return-container">
+        <button class="return-button" onclick="goBack()">⬅ </button>
+    </div>
+
+    <div class="create-chat">
+        <div class="info">
+            <h1>Unirse a un chat</h1>
+        </div>
+        <form id="createChatForm" action="/join-the-chat" method="post">
+            <label for="chatName">Nombre del chat</label>
+            <input type="text" id="chatName" name="chatName" placeholder="Chat Name" required>
+
+            <label for="chatId">Id del chat</label>
+            <input type="text" id="chatId" name="chatId" placeholder="chatId" required>
+
+            <label for="chatPassword">Contraseña</label>
+            <input type="password" id="chatPassword" name="chatPassword" placeholder="Password" required>
+
+            <label for="chatPasswordR">Repetir contraseña</label>
+            <input type="password" id="chatPasswordR" name="chatPasswordR" placeholder="Repeat password" required>
+            
+            <div id="errorMessage" class="error"></div>
+
+            <button type="submit">Unirse</button>
+        </form>
+    </div>
+
+    <script>
+        function goBack() {
+            window.location.href = '/chats'
+        }
+        document.getElementById("createChatForm").addEventListener("submit", function (e) {
+            e.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+            // Capturar valores de las contraseñas
+            const password = document.getElementById("chatPassword").value;
+            const confirmPassword = document.getElementById("chatPasswordR").value;
+            const errorMessage = document.getElementById("errorMessage");
+
+            // Verificar si las contraseñas coinciden
+            if (password === confirmPassword) {
+                errorMessage.textContent = ""; // Limpiar mensaje de error
+                this.submit(); // Envía el formulario si todo está correcto
+            } else {
+                errorMessage.textContent = "Las contraseñas no coinciden. Por favor, inténtalo de nuevo.";
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,65 +1,110 @@
-/* Estilos globales y de contenedor */
-*,
-*::before,
-*::after {
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
-:root {
-  color-scheme: light dark;
-}
-
 body {
-  margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background-color: #f3f4f6;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Ocupa todo el viewport */
-  background-color: #f3f4f6;
-  overflow: hidden; /* Evita scroll adicional */
+  height: 100vh;
+  overflow: hidden;
 }
 
 #chat {
   border: 1px solid #ccc;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  width: 90%; /* Adaptable */
+  width: 90%;
   max-width: 600px;
-  height: 100%; /* Ocupa el 100% de la altura */
+  height: 100%;
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
 }
 
+#chat .header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #0056b3;
+  color: #f0f0f0;
+  height: 15%;
+  width: 100%;
+  border-radius: 10px 10px 0 0;
+  position: relative;
+  overflow: hidden;
+  padding-left: 2%;
+}
+#chat .header .info {
+  margin-left: 5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #0056b3;
+  color: #f0f0f0;
+  height: 30%;
+  width: 80%;
+  position: relative;
+  overflow: hidden;
+  padding-left: 2%;
+  box-sizing: border-box;
+}
+
+#chat .header .info h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  white-space: nowrap;
+  position: absolute;  /* Cambiado para evitar que se desborde */
+  width: 100%;  /* Asegura que el texto ocupe todo el contenedor */
+  animation: scroll-text 7s linear infinite;
+}
+
+#chat small {
+  margin-left: 5%;
+  color: #f0f0f0;
+  font-size: 0.9rem;
+}
+
+@keyframes scroll-text {
+  from {
+    transform: translateX(100%);  /* Inicia desde fuera de la pantalla */
+  }
+  to {
+    transform: translateX(-100%);  /* Termina fuera de la pantalla también */
+  }
+}
+
+
 /* Lista de mensajes */
 #messages {
   list-style-type: none;
   margin: 0;
-  padding: 8px; /* Menor padding */
-  overflow-y: auto; /* Scroll si hay demasiados mensajes */
-  flex: 1; /* Ocupa el espacio disponible */
+  padding: 10px;
+  overflow-y: auto;
+  flex: 1;
+  background-color: #f9f9f9;
   display: flex;
   flex-direction: column;
-  gap: 8px; /* Espacio entre mensajes */
-  background-color: #f9f9f9;
+  gap: 8px;
 }
 
 #messages > li {
   padding: 0.4rem 0.8rem;
-  margin: 0;
   border-radius: 10px;
   word-wrap: break-word;
-  box-sizing: border-box;
-  max-width: 90%; /* Máximo uso del espacio */
-  font-size: 1rem;
+  max-width: 90%;
 }
 
 .my-message {
   background-color: #497491;
   color: #fff;
   align-self: flex-end;
-  text-align: right;
   border-radius: 10px 10px 0 10px;
 }
 
@@ -67,19 +112,10 @@ body {
   background-color: #2c2a2a;
   color: #e5e5e5;
   align-self: flex-start;
-  text-align: left;
   border-radius: 10px 10px 10px 0;
 }
 
-small {
-  color: #fff;
-  font-size: 0.8rem;
-  margin-top: 4px;
-  display: block;
-  text-align: right;
-}
-
-/* Formulario de chat */
+/* Formulario */
 #form {
   display: flex;
   padding: 6px;
@@ -111,82 +147,42 @@ small {
   cursor: pointer;
 }
 
-/* Media query para dispositivos pequeños */
+/* Botón de regresar */
+.return-button {
+  position: fixed;
+  top: 20px;
+  right: 30px; 
+  z-index: 1000;
+  background-color: #4285f4;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  padding: 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.return-button:hover {
+  background-color: #2563eb;
+}
+
+.return-button:active {
+  background-color: #1e4bb8;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
   #chat {
-    width: 100%; /* Ocupar todo el ancho */
-    height: 100%; /* Ocupa toda la pantalla */
+    width: 100%;
+    height: 100%;
     border-radius: 0;
     box-shadow: none;
   }
 
-  #messages > li {
-    font-size: 0.9rem;
-    padding: 0.3rem 0.6rem;
-    max-width: 95%; /* Mejor uso del espacio */
-  }
-
-  #input {
-    font-size: 0.9rem;
-    padding: 0.3rem 0.6rem;
-  }
-
-  #form > button {
-    padding: 0.3rem 0.6rem;
-    font-size: 0.8rem;
+  #chat h1 {
+    font-size: 1.5rem;
   }
 }
 
-/* Estilo para la fecha y hora */
-.date {
-  font-size: 10px;
-  color: #ddd;
-  text-align: right;
-  display: block;
-  margin-top: 4px;
-}
-
-/* Estilo para mensajes de error */
-.error-messages {
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #f8d7da;
-  color: #721c24;
-  padding: 12px;
-  border-radius: 5px;
-  border: 1px solid #f5c6cb;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
-  opacity: 1;
-  transition: opacity 0.5s ease-out;
-  font-size: 14px;
-  max-width: 90%;
-}
-
-.error-messages.hidden {
-  opacity: 0;
-  visibility: hidden;
-}
-
-/* Botón de cerrar sesión */
-#close-session {
-  background-color: #0cf;
-  color: #fff;
-  height: 40px;
-  width: 120px;
-  margin-top: 20px;
-  margin-left: auto;
-  margin-right: auto;
-  border-radius: 20px;
-  border: none;
-  text-align: center;
-  font-weight: bold;
-  cursor: pointer;
-  display: block;
-  transition: background 0.3s;
-}
-
-#close-session:hover {
-  background-color: #09f;
-}

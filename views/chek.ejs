@@ -5,12 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login failed</title>
     <link rel="stylesheet" href="../public/css/login-sigin.css">
+    <script>
+        function goBack() {
+        window.history.back();
+        }
+    </script>
+
 </head>
 <body>
     <div class="container">
         <p> <%= message %> </p>
         <form action="/">
-            <button class="return-login" type="submit">volver</button>
+            <button class="return-login" onclick="goBack()">volver</button>
 
         </form>
     </div>

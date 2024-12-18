@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,88 +7,112 @@
   <link rel="stylesheet" href="/public/css/chat.css">
 
   <script type="module">
-    const closeSession = document.getElementById('close-session')
-
-    closeSession.addEventListener('click', e => {
-    e.preventDefault()
-    fetch('/logout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-        .then(res => {
-          console.log(res)
-          window.location.href = '/'
-        })
-    })
     import { io } from 'https://cdn.socket.io/4.3.2/socket.io.esm.min.js';
   
     const username = "<%= username %>";
+    const chatId = "<%= id %>"; // El ID del chat
+    const token = "<%= token %>"; // El token JWT del usuario
 
     console.log('Usuario en cliente:', username);
+
+    // Conexión al servidor de Socket.IO
     const socket = io('https://chat-with-socket-3.onrender.com', {
-      auth: { username }
+      auth: { token, chatId }
     });
   
     const form = document.getElementById('form');
     const input = document.getElementById('input');
-    const messages = document.getElementById('messages');
+    const message = document.getElementById('messages');
   
-    // Emitir el evento para recuperar mensajes antiguos
-    socket.on('connect', () => {
-      socket.emit('recover messages');
+    // Escuchar mensajes recuperados al conectar
+    socket.on('load messages', (messages) => {
+      messages.forEach(({ content, user, date }) => {
+        renderMessage(content, user, date, username);
+      });
+  
+      message.scrollTop = message.scrollHeight
     });
   
     socket.on('chat message', (msg, messageUsername, date) => {
-      console.log(date)
-      const messageContent = typeof msg === 'string' ? msg : JSON.stringify(msg);
-      const isMyMessage = messageUsername === username;
-      const messageClass = isMyMessage ? 'my-message' : 'other-message';
-      // Construcción del mensaje
-      setTimeout(() => {
-        const item = `
-        <li class="${messageClass}">
-          <small>${messageUsername}</small>
-          <p>${messageContent}</p>
-          <p class="date">${date}</p>
-        </li>`;
-        messages.insertAdjacentHTML('beforeend', item);
-        messages.scrollTop = messages.scrollHeight;
-      }, 300);
-
+      renderMessage(msg, messageUsername, date, username)
+      message.scrollTop = message.scrollHeight;
     });
   
+    // Función para renderizar mensajes
+    function renderMessage(content, user, date, currentUser) {
+      const formattedDate = new Date(date).toLocaleString();
+      const isMyMessage = user === currentUser;
+      const messageClass = isMyMessage ? 'my-message' : 'other-message';
+  
+      const item = `
+        <li class="${messageClass}">
+          <small>${user}</small>
+          <p>${content}</p>
+          <p class="date">${formattedDate}</p>
+        </li>`;
+      message.insertAdjacentHTML('beforeend', item);
+    }
+  
+    // Enviar un nuevo mensaje
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      if (input.value) {
-        socket.emit('chat message', input.value);
+      if (input.value.trim()) {
+        socket.emit('chat message', input.value.trim());
         input.value = '';
+      } else {
+        alert('El mensaje no puede estar vacío');
       }
     });
   
-    socket.on('disconnect', () => {
-      console.log('Desconectado del servidor');
+    // Conexión al servidor
+    socket.on('connect', () => {
+      console.log('✅ Conectado al servidor');
     });
   
+    // Manejar desconexión
+    socket.on('disconnect', () => {
+      console.log('❌ Desconectado del servidor');
+    });
+  
+    // Manejar errores de conexión
     socket.on('connect_error', (err) => {
-      console.error('Error de conexión:', err.message);
+      console.error('❗ Error de conexión:', err.message);
+      alert('Error de conexión: ' + err.message);
+    });
+  
+    // Manejar errores enviados desde el servidor
+    socket.on('error', (errMsg) => {
+      console.error('❗ Error:', errMsg);
+      alert('Error: ' + errMsg);
     });
   </script>
   
-  
-
 </head>
 
 <body>
+  <!-- Botón Return -->
+  <div class="return-container">
+    <button class="return-button" onclick="goBack()">⬅ </button>
+  </div>
+
   <section id="chat">
+    <div class="header">
+      <div class="info">
+       <h1><%= chat %></h1>
+      </div>
+      <small>ID: <%= id %></small>
+    </div>
     <ul id="messages"></ul>
     <form id="form">
       <input type="text" name="message" id="input" placeholder="Escribe tu mensaje" autocomplete="off" required />
       <button type="submit">Enviar</button>
     </form>
-    <button id="close-session">Cerrar sesión</button>
   </section>
+  <script>
+    function goBack() {
+        window.location.href = '/chats'
+    }
+</script>
 </body>
-
 </html>
+

@@ -8,18 +8,9 @@ height: 100vh;
 margin: 0;
 }
 
-.signup-container {
+.signup-container, .login-container {
   margin: 15px;
-  display: inline-block;
-  width: 450px;
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
-}
-
-.login-container {
-  margin: 15px;
+  margin-left: 5%;
   display: inline-block;
   width: 450px;
   background-color: white;
@@ -58,15 +49,6 @@ button:hover {
 background-color: #0056b3;
 }
 
-.return{
-height: 50px;
-width: 50px;
-border-radius: 100px;
-position: absolute;
-left: 1%;
-top: 3%
-
-}
 .error-messages {
   background-color: rgb(238, 107, 107);
   min-height: 50px;
@@ -113,8 +95,64 @@ list-style-type: disc;
 
 }
 
-.return-login{
-  height: 40px;
-  width: 60px;
+.create-chat {
+  margin: 15%;
+  margin-left: 13%;
+  margin-right: 5%;
+  display: inline-block;
+  width: 450px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+  border: solid black 2px;
 }
-  
+
+.create-chat .info {
+  width: 95.2%;
+  background-color: #0056b3;
+  color: #f0f0f0;
+  height: 15%;
+  margin: 0;
+  margin-bottom: 5%;
+}
+
+.create-chat h1{
+  width: 100%;
+  background-color: #0056b3;
+  color: #f0f0f0;
+  height: 15%;
+  margin: 0;
+  margin-left: 5%;
+  margin-bottom: 5%;
+}
+
+.create-chat input, label{
+  margin-left: 5%;
+}
+
+.create-chat button{
+  margin: 5%;
+}
+
+.return-button {
+  position: fixed;
+  top: 5px;
+  left: 5px; 
+  z-index: 1000;
+  background-color: #4285f4;
+  color: #fff; /* Texto blanco */
+  border: none;
+  border-radius: 50%;
+  padding: 1rem ;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.return-button:hover {
+  background-color: #2563eb; /* Color azul más oscuro al pasar el mouse */
+}
+
+.return-button:active {
+  background-color: #1e4bb8; /* Efecto al hacer click */
+}

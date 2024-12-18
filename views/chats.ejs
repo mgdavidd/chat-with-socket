@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chats</title>
+  <link rel="stylesheet" href="/public/css/principal.css">
+
+</head>
+<body>
+  <header>
+    <h1>Bienvenido a tus Chats, <%= username %></h1>
+    <button id="close-session">Cerrar sesión</button>
+  </header>
+
+  <section class="chat-actions">
+    <form action="/create-chat" method="GET">
+      <button type="submit">Crear un Chat</button>
+    </form>
+    <form action="/join-the-chat" method="GET">
+      <button type="submit">Unirse a un Chat</button>
+    </form>
+  </section>
+
+  <main>
+    <div class="nav">
+      <button id="list1-btn">Todo</button>
+      <button id="list2-btn">Tus Chats</button>
+    </div>
+    <div class="list-container">
+      <section class="chat-list-section" id="list1">
+        <h2>Todo</h2>
+        <% if (chats.length > 0) { %>
+          <div class="chat-buttons">
+            <% for(let i = 0; i < chats.length; i++){ %>
+              <a href="/chat/<%= ids[i].id %>" class="chat-link">
+                <span><%= chats[i].chat_name %></span>
+              </a>
+              <button 
+                class="leave-button" 
+                data-chat-id="<%= ids[i].id %>">
+                Salir
+              </button>
+            <% } %>
+          </div>          
+        <% } else { %>
+          <p>No tienes chats disponibles.</p>
+        <% } %>
+      </section>
+        
+      <section class="chat-list-section hidden" id="list2">
+        <h2>Tus Chats</h2>
+        <% if (userChat.length > 0) { %>
+          <div class="chat-buttons">
+            <% for(let i = 0; i < userChat.length; i++){ %>
+              <!-- Botón para entrar al chat -->
+              <a href="/chat/<%= userChatId[i].id %>" class="chat-link">
+                <span><%= userChat[i].chat_name %></span>
+                <span class="tooltip-text">Entrar al chat <%= userChat[i].chat_name %></span> <!-- Tooltip -->
+              </a>
+
+              <button class="show-delete-form" data-chat-id="<%= userChatId[i].id %>">Borrar</button>
+
+              <!-- Formulario de borrar chat (oculto inicialmente) -->
+              <div id="delete-form-<%= userChatId[i].id %>" class="chat-form hidden">
+                <form action="/delete-chat/<%= userChatId[i].id %>" method="POST">
+                  <h3>Confirmar eliminación del chat <%= userChat[i].chat_name %></h3>
+                  <label for="password-<%= userChatId[i].id %>">Contraseña del chat:</label>
+                  <input type="password" id="password-<%= userChatId[i].id %>" name="password" required><br><br>
+
+                  <label for="confirm-password-<%= userChatId[i].id %>">Repetir contraseña:</label>
+                  <input type="password" id="confirm-password-<%= userChatId[i].id %>" name="confirmPassword" required><br><br>
+
+                  <div id="errorMessage" class="error"></div>
+
+                  <button type="submit">Borrar Chat</button>
+                </form>
+              </div>
+            <% } %>
+          </div>          
+        <% } else { %>
+          <p>No tienes chats disponibles.</p>
+        <% } %>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
+  
+    <footer>
+      <p>&copy; 2024 Chats App. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+      // Seleccionar todos los botones "salir"
+      const leaveButtons = document.querySelectorAll('.leave-button');
+
+      leaveButtons.forEach(button => {
+        button.addEventListener('click', async () => {
+          // Obtener el ID del chat desde el atributo data-chat-id
+          const chatId = button.getAttribute('data-chat-id');
+
+          try {
+            // Enviar el ID al backend usando fetch
+            const response = await fetch('/leave-chat', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ chatId }) // Enviar el ID en el cuerpo de la petición
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+              alert(result.message); // Mostrar mensaje de éxito
+              window.location.reload()
+              console.log(result)
+            } else {
+              console.log(result)
+              alert(result.error || 'Error al salir del chat.');
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            alert('Error en la solicitud.');
+          }
+        });
+      });
+    });
+
+    document.getElementById('list1-btn').addEventListener('click', function() {
+      list1.classList.remove("hidden");
+      list2.classList.add("hidden");
+      
+      // Cambiar el fondo de los botones
+      document.getElementById('list1-btn').style.backgroundColor = '#e3e6e7'
+      document.getElementById('list2-btn').style.backgroundColor = '#1f90b3'
+      document.getElementById('list2-btn').style.color = '#fff'
+      document.getElementById('list1-btn').style.color = '#333'
+
+    });
+
+    document.getElementById('list2-btn').addEventListener('click', function() {
+      list2.classList.remove("hidden");
+      list1.classList.add("hidden");
+
+      document.getElementById('list2-btn').style.backgroundColor = '#e3e6e7'
+      document.getElementById('list1-btn').style.backgroundColor = '#1f90b3'
+      document.getElementById('list1-btn').style.color = '#fff'
+      document.getElementById('list2-btn').style.color = '#333'
+    });
+
+
+    const closeSession = document.getElementById('close-session');
+    closeSession.addEventListener('click', e => {
+      e.preventDefault();
+      fetch('/logout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      })
+        .then(res => window.location.href = '/');
+    });
+
+    const showDeleteButtons = document.querySelectorAll('.show-delete-form');
+    showDeleteButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const chatId = button.dataset.chatId;
+        const form = document.getElementById(`delete-form-${chatId}`);
+        form.classList.toggle('hidden');
+      });
+    });
+
+    // Validar contraseñas antes de enviar el formulario SOLO en formularios de borrar chat
+    const deleteForms = document.querySelectorAll('.chat-form form');
+    deleteForms.forEach(form => {
+      form.addEventListener('submit', function (e) {
+        const chatId = form.action.split('/').pop(); // Extraer el ID del chat
+        const password = document.getElementById(`password-${chatId}`).value;
+        const confirmPassword = document.getElementById(`confirm-password-${chatId}`).value;
+        const errorMessage = form.querySelector('.error'); // Encontrar el mensaje de error en el formulario actual
+
+        if (password !== confirmPassword) {
+          e.preventDefault(); // Bloquear solo si las contraseñas no coinciden
+          errorMessage.textContent = "Las contraseñas no coinciden. Por favor, inténtalo de nuevo.";
+        } else {
+          errorMessage.textContent = ""; // Limpiar el mensaje de error
+          // El formulario se envía automáticamente porque no hay preventDefault
+        }
+      });
+    });
+
+    </script>
+</body>
+</html>
