@@ -28,7 +28,7 @@ const port = process.env.PORT ?? 3000;
 const SECRET_JWT_KEY = process.env.SECRET_JWT_KEY
 
 const corsOptions = {
-  origin: 'https://chat-with-socket-4r3e.onrender.com/', // URL permitida
+  origin: 'https://chat-with-socket-1-s0rl.onrender.com', // URL permitida
   methods: ['GET', 'POST'], // Métodos permitidos
   allowedHeaders: ['Content-Type', 'Authorization'], // Encabezados permitidos
   credentials: true, // Permitir cookies en las solicitudes CORS
